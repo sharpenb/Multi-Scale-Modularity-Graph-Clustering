@@ -89,7 +89,7 @@ def clean_dataset(G, pos={}, label={}):
     return G_cleaned, pos_cleaned, label_cleaned
 
 
-def connected_components_dataset(G, pos={}, label={}, k=0):
+def extract_dataset_connected_components(G, pos={}, label={}, k=0):
     G_cc_k = sorted(nx.connected_component_subgraphs(G), key=len, reverse=True)[k]
     pos_cc_k = {}
     if pos != {}:
@@ -101,3 +101,33 @@ def connected_components_dataset(G, pos={}, label={}, k=0):
             label_cc_k[u] = label[u]
 
     return G_cc_k, pos_cc_k, label_cc_k
+
+
+def connect_dataset_connected_components(G, pos={}, label={}):
+    connected_components = sorted(nx.connected_component_subgraphs(G), key=len, reverse=True)
+    giant_component = connected_components[0]
+    min_weight = min(nx.get_edge_attributes(G, 'weight').values())
+    new_edges = []
+    for cc in connected_components:
+        p = np.random.choice(giant_component.nodes())
+        q = np.random.choice(cc.nodes())
+        new_edges.append((p, q, min_weight))
+    G.add_weighted_edges_from(new_edges)
+    return G, pos, label
+
+
+def generate_dataset_from_euclidean_points(points, similarity_measure, threshold, labels={}):
+    G = nx.Graph()
+    pos = {}
+    edges = []
+    for u, p in enumerate(points):
+        G.add_node(u)
+        pos[u] = p
+        for v, q in enumerate(points):
+            weight = similarity_measure(p, q)
+            if weight > threshold:
+                edges.append((u, v, weight))
+    G.add_weighted_edges_from(edges)
+    return G, pos, labels
+
+

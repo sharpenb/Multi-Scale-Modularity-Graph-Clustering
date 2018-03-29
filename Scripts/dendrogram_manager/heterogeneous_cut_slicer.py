@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def clustering_from_heterogeneous_cut(D, cut):
     clusters = []
     n_nodes = np.shape(D)[0] + 1
@@ -42,7 +41,7 @@ def best_heterogeneous_cut(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y)
             left_tree_score = scoring(left_tree.size, new_distance, left_tree.distance)
         else:
             left_tree_score = 0.
-        if left_tree.cluster_label not in to_exclude and left_tree_score > left_tree.best_score:#/float(len(left_tree.best_cut)):
+        if left_tree.cluster_label not in to_exclude and left_tree_score > left_tree.best_score: #/float(len(left_tree.best_cut)):
             left_tree.best_score = left_tree_score
             left_tree.best_cut = [left_tree.cluster_label]
 
@@ -50,7 +49,7 @@ def best_heterogeneous_cut(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y)
             right_tree_score = scoring(right_tree.size, new_distance, right_tree.distance)
         else:
             right_tree_score = 0.
-        if right_tree.cluster_label not in to_exclude and right_tree_score > right_tree.best_score:#/float(len(right_tree.best_cut)):
+        if right_tree.cluster_label not in to_exclude and right_tree_score > right_tree.best_score: #/float(len(right_tree.best_cut)):
             right_tree.best_score = right_tree_score
             right_tree.best_cut = [right_tree.cluster_label]
 
@@ -59,14 +58,19 @@ def best_heterogeneous_cut(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y)
         new_tree.right = right_tree
         cluster_trees[n_nodes + t] = new_tree
 
-    return set(cluster_trees[2 * n_nodes - 2].best_cut)
+    best_cut = set(cluster_trees[2 * n_nodes - 2].best_cut)
+    best_score = cluster_trees[2 * n_nodes - 2].best_score
+
+    return best_cut, best_score
 
 
 def ranking_heterogeneous_cuts(D, k, scoring=lambda w, x, y: w * (np.log(x) - np.log(y))):
-    cuts = []
+    ranked_cuts = []
+    ranked_cut_scores = []
     to_exclude = set()
     for i in range(k):
-        best_cut = best_heterogeneous_cut(D, scoring=scoring, to_exclude=to_exclude)
-        cuts.append(best_cut)
+        best_cut, best_cut_score = best_heterogeneous_cut(D, scoring=scoring, to_exclude=to_exclude)
+        ranked_cuts.append(best_cut)
+        ranked_cut_scores.append(best_cut_score)
         to_exclude = to_exclude.union(best_cut)
-    return cuts
+    return ranked_cuts, ranked_cut_scores
