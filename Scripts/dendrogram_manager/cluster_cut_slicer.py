@@ -95,6 +95,6 @@ def ranking_cluster_cuts(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y)))
         cluster_trees[n_nodes + t] = new_tree
 
     ranked_cuts = sorted(cuts, key=lambda x: cut_scores[x], reverse=True)
-    ranked_cut_scores = sorted(list(cut_scores), reverse=True)
+    ranked_cut_scores = sorted(list(cut_scores.values()), reverse=True)
 
     return ranked_cuts, ranked_cut_scores

@@ -35,6 +35,7 @@ def make_n_blocks_experiment(algorithms, range_n_blocks=range(10, 100, 10), bloc
     colors = ['b', 'g', 'r', 'c', 'm', 'y']
     markers = ['o', '+', 'x', '*', '^', 'v']
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms[name], range_n_blocks, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Number of blocks")
@@ -43,9 +44,11 @@ def make_n_blocks_experiment(algorithms, range_n_blocks=range(10, 100, 10), bloc
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("n_blocks_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("n_blocks_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms_blocks[name], range_n_blocks, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Number of blocks")
@@ -53,6 +56,7 @@ def make_n_blocks_experiment(algorithms, range_n_blocks=range(10, 100, 10), bloc
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("n_blocks_blocks_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("n_blocks_blocks_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
@@ -77,6 +81,7 @@ def make_block_size_experiment(algorithms, range_block_size=range(10, 50, 5), n_
     colors = ['b', 'g', 'r', 'c', 'm', 'y']
     markers = ['o', '+', 'x', '*', '^', 'v']
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms[name], range_block_size, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Block size")
@@ -85,9 +90,11 @@ def make_block_size_experiment(algorithms, range_block_size=range(10, 50, 5), n_
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("block_size_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("block_size_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms_blocks[name], range_block_size, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Block size")
@@ -95,6 +102,7 @@ def make_block_size_experiment(algorithms, range_block_size=range(10, 50, 5), n_
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("block_size_blocks_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("block_size_blocks_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
@@ -119,6 +127,7 @@ def make_degree_in_out_experiment(algorithms, d_in=5., range_d_out=np.linspace(1
     colors = ['b', 'g', 'r', 'c', 'm', 'y']
     markers = ['o', '+', 'x', '*', '^', 'v']
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms[name], range_d_out, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Average external degree")
@@ -127,9 +136,11 @@ def make_degree_in_out_experiment(algorithms, d_in=5., range_d_out=np.linspace(1
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("degree_in_out_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("degree_in_out_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms_blocks[name], range_d_out, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Average external degree")
@@ -137,6 +148,7 @@ def make_degree_in_out_experiment(algorithms, d_in=5., range_d_out=np.linspace(1
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("degree_in_out_blocks_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("degree_in_out_blocks_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
@@ -161,6 +173,7 @@ def make_block_size_het_experiment(algorithms, range_param=np.linspace(1., 3., n
     colors = ['b', 'g', 'r', 'c', 'm', 'y']
     markers = ['o', '+', 'x', '*', '^', 'v']
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms[name], range_param, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Heterogeneity parameter")
@@ -169,9 +182,11 @@ def make_block_size_het_experiment(algorithms, range_param=np.linspace(1., 3., n
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("block_size_het_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("block_size_het_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms_blocks[name], range_param, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Heterogeneity parameter")
@@ -179,6 +194,7 @@ def make_block_size_het_experiment(algorithms, range_param=np.linspace(1., 3., n
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("block_size_het_blocks_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("block_size_het_blocks_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
@@ -203,6 +219,7 @@ def make_block_size_ratio_experiment(algorithms, range_ratio=range(1,10), big_bl
     colors = ['b', 'g', 'r', 'c', 'm', 'y']
     markers = ['o', '+', 'x', '*', '^', 'v']
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms[name], range_ratio, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Block size ratio")
@@ -211,9 +228,11 @@ def make_block_size_ratio_experiment(algorithms, range_ratio=range(1,10), big_bl
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("block_size_ratio_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("block_size_ratio_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
+    plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
         plot_results(results_algorithms_blocks[name], range_ratio, label=name, color=colors[i], marker=markers[i])
     plt.xlabel("Block size ratio")
@@ -221,6 +240,7 @@ def make_block_size_ratio_experiment(algorithms, range_ratio=range(1,10), big_bl
     plt.legend()
     if SAVE_PLOTS:
         plt.savefig("block_size_ratio_blocks_" + results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig("block_size_ratio_blocks_" + results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
@@ -237,7 +257,11 @@ def make_graphical_experiments(algorithms=[], n_samples=1500, run_scikit_algorit
     anisotropic_blobs = (X_aniso, y)
     varied_blobs = make_blobs(n_samples=n_samples, cluster_std=[1.0, 2.5, 0.5], random_state=random_state)
 
-    plt.figure(figsize=((9 + len(algorithms)) * 2 + 3, 12.5))
+    if run_scikit_algorithms:
+        scikit_algorithms = range(9)
+    else:
+        scikit_algorithms = []
+    plt.figure(figsize=((len(scikit_algorithms) + len(algorithms)) * 2 + 3, 12.5))
     plt.subplots_adjust(left=.02, right=.98, bottom=.001, top=.96, wspace=.05, hspace=.01)
     plot_num = 1
 
@@ -272,9 +296,7 @@ def make_graphical_experiments(algorithms=[], n_samples=1500, run_scikit_algorit
         connectivity = nx.to_scipy_sparse_matrix(G)
         print("Dataset: ", i_dataset)
 
-        if not run_scikit_algorithms:
-            scikit_algorithms = []
-        else:
+        if run_scikit_algorithms:
             ms = cluster.MeanShift(bandwidth=bandwidth, bin_seeding=True)
             two_means = cluster.MiniBatchKMeans(n_clusters=params['n_clusters'])
             ward = cluster.AgglomerativeClustering(n_clusters=params['n_clusters'], linkage='ward', connectivity=connectivity)
@@ -363,5 +385,6 @@ def make_graphical_experiments(algorithms=[], n_samples=1500, run_scikit_algorit
 
     if SAVE_PLOTS:
         plt.savefig(results_file_name + ".pdf", bbox_inches='tight')
+        plt.savefig(results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()

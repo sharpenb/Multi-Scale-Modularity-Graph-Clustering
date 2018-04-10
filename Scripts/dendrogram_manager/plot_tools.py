@@ -5,20 +5,21 @@ from scipy.cluster.hierarchy import dendrogram
 
 
 
-def plot_dendrogram(D, scaling=lambda x:np.log(x), figsize=(15, 8), filename=""):
+def plot_dendrogram(D, scaling=lambda x:np.log(x), figsize=(15, 8), file_name=""):
     plt.figure(figsize=figsize)
     D_scaled = D.copy()
     D_scaled[:, 2] = scaling((D[:, 2])) - scaling((D[0, 2]))
     dendrogram(D_scaled, leaf_rotation=90.)
     plt.axis('off')
 
-    if filename != "":
-        plt.savefig(filename + ".pdf", bbox_inches='tight')
+    if file_name != "":
+        plt.savefig(file_name + ".pdf", bbox_inches='tight')
+        plt.savefig(file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
 
 
-def plot_dendrogram_clustering(D, clusters, scaling=lambda x: np.log(x), figsize=(15, 8), filename=""):
+def plot_dendrogram_clustering(D, clusters, scaling=lambda x: np.log(x), figsize=(15, 8), file_name=""):
     n_nodes = np.shape(D)[0] + 1
     colors = ['b', 'g', 'r', 'c', 'm', 'y'] + sorted(list(mcd.XKCD_COLORS))
     clusters = sorted(clusters, key=len, reverse=True)
@@ -43,7 +44,8 @@ def plot_dendrogram_clustering(D, clusters, scaling=lambda x: np.log(x), figsize
     dendrogram(D_scaled, leaf_rotation=90., link_color_func=lambda x: cluster_colors[x])
     plt.axis('off')
 
-    if filename != "":
-        plt.savefig(filename + ".pdf", bbox_inches='tight')
+    if file_name != "":
+        plt.savefig(file_name + ".pdf", bbox_inches='tight')
+        plt.savefig(file_name + ".png", bbox_inches='tight')
     else:
         plt.show()

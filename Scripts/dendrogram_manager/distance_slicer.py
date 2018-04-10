@@ -66,7 +66,7 @@ def best_distance(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y)), mean=l
 def ranking_distances(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y)), mean=lambda x, y: np.sqrt(x*y)):
     n_nodes = np.shape(D)[0] + 1
 
-    cluster_trees = {t: ClusterTree(t, 0, 1, 0.) for t in range(n_nodes)}
+    cluster_trees = {t: ClusterTree(t, 1., 1, 0.) for t in range(n_nodes)}
     for t in range(n_nodes - 1):
         i = int(D[t][0])
         j = int(D[t][1])
@@ -122,19 +122,18 @@ def naive_ranking_distances(D, scoring=lambda x, y: np.log(x) - np.log(y), mean=
     return ranked_distances, ranked_distance_scores
 
 
-def filter_ranking(ranking, scores, D, threshold=.1, scaling=lambda x: np.log(x)):
-    s_index = np.concatenate(([0.], scaling(D[:, 2]) - scaling(D[0, 2])))
-
+def filter_distance_ranking(ranking, scores, D, threshold=.1, scaling=lambda x: np.log(x)):
+    scaling_e_0 = scaling(D[0, 2])
     filtered_ranking = []
     filtered_scores = []
-    for i, t in enumerate(ranking):
+    for i, d in enumerate(ranking):
         to_exclude = False
-        for s in filtered_ranking:
-            if abs(s_index[s] - s_index[t]) < threshold * s_index[s]:
+        for e in filtered_ranking:
+            if abs(scaling(e) - scaling(d)) < threshold * (scaling(e) - scaling_e_0):
                 to_exclude = True
                 break
         if not to_exclude:
-            filtered_ranking.append(t)
+            filtered_ranking.append(d)
             filtered_scores.append(scores[i])
 
     return filtered_ranking, filtered_scores

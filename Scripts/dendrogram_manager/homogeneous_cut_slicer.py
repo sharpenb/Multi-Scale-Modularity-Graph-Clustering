@@ -5,7 +5,9 @@ def clustering_from_homogeneous_cut(D, cut):
     n_nodes = np.shape(D)[0] + 1
     cluster = {i: [i] for i in range(n_nodes)}
     for t in range(cut):
-        cluster[n_nodes + t] = cluster.pop(int(D[t][0])) + cluster.pop(int(D[t][1]))
+        i = int(D[t][0])
+        j = int(D[t][1])
+        cluster[n_nodes + t] = cluster.pop(i) + cluster.pop(j)
     clusters = [cluster[c] for c in cluster]
     return clusters
 
@@ -24,7 +26,7 @@ class ClusterTree:
 def best_homogeneous_cut(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y))):
     n_nodes = np.shape(D)[0] + 1
 
-    cluster_trees = {t: ClusterTree(t, 0, 1, 0.) for t in range(n_nodes)}
+    cluster_trees = {t: ClusterTree(t, 1., 1, 0.) for t in range(n_nodes)}
     for t in range(n_nodes - 1):
         i = int(D[t][0])
         j = int(D[t][1])
@@ -64,7 +66,7 @@ def best_homogeneous_cut(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y)))
 def ranking_homogeneous_cuts(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y))):
     n_nodes = np.shape(D)[0] + 1
 
-    cluster_trees = {t: ClusterTree(t, 0, 1, 0.) for t in range(n_nodes)}
+    cluster_trees = {t: ClusterTree(t, 1., 1, 0.) for t in range(n_nodes)}
     for t in range(n_nodes - 1):
         i = int(D[t][0])
         j = int(D[t][1])
@@ -116,23 +118,7 @@ def naive_ranking_homogeneous_cuts(D, scoring=lambda x, y: np.log(x) - np.log(y)
     return ranked_cuts, ranked_scores
 
 
-def filter_ranking(ranking, scores, D, threshold=.1, scaling=lambda x: np.log(x)):
-    # n_nodes = np.shape(D)[0] + 1
-    # w = {u: 0 for u in range(n_nodes)}
-    # wtot = 0
-    # for (u, v) in G.edges():
-    #     weight = G[u][v]['weight']
-    #     w[u] += weight
-    #     w[v] += weight
-    #     wtot += 2 * weight
-    #
-    # s_index = {-1: 0}
-    # for t in range(n_nodes - 1):
-    #     i = int(D[t][0])
-    #     j = int(D[t][1])
-    #     w[n_nodes + t] = w[i] + w[j]
-    #     s_index[t] = s_index[t - 1] - w[i]**2 - w[j]**2 + w[n_nodes + t]**2
-
+def filter_homogeneous_ranking(ranking, scores, D, threshold=.1, scaling=lambda x: np.log(x)):
     s_index = np.concatenate(([0.], scaling(D[:, 2]) - scaling(D[0, 2])))
     filtered_ranking = []
     filtered_scores = []

@@ -4,8 +4,10 @@ from dendrogram_manager.homogeneous_cut_slicer import *
 from dendrogram_manager.heterogeneous_cut_slicer import *
 from dendrogram_manager.distance_slicer import *
 from experiments.experiments_manager import *
+from random import seed
 
-SAVE_PLOTS = False
+seed(1)
+SAVE_PLOTS = True
 results_file_name = "algorithms_comparison"
 
 # List of tested algorihtms:
@@ -36,8 +38,8 @@ def paris_louvain(G):
 
 
 algorithms = [('Louvain', louvain),
-              ('Paris+homogeneous cut', paris_homogeneous),
-              ('Paris+heterogeneous cut', paris_heterogeneous),
-              ('Paris+louvain', paris_louvain)]
+              ('Paris+homo', paris_homogeneous),
+              ('Paris+hetero', paris_heterogeneous),
+              ('Paris+Louvain', paris_louvain)]
 
 make_graphical_experiments(algorithms=algorithms, n_samples=1500, run_scikit_algorithms=False, SAVE_PLOTS=SAVE_PLOTS, results_file_name=results_file_name)

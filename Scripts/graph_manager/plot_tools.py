@@ -21,6 +21,7 @@ def plot_graph(G, pos, figsize=(15, 8), node_size=50, alpha =.2, nodes_numbering
 
     if file_name != "":
         plt.savefig(file_name + ".pdf", bbox_inches='tight')
+        plt.savefig(file_name + ".png", bbox_inches ='tight')
     else:
         plt.show()
 
@@ -52,5 +53,6 @@ def plot_graph_clustering(G, clusters, pos, figsize=(15, 8), node_size=50, alpha
 
     if file_name != "":
         plt.savefig(file_name + ".pdf", bbox_inches ='tight')
+        plt.savefig(file_name + ".png", bbox_inches ='tight')
     else:
         plt.show()

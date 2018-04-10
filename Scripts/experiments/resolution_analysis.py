@@ -34,11 +34,11 @@ def resolution_n_clusters(G, k=40, n_tests=100, file_name =""):
             key_resolutions_louvain.append(resolution)
 
     plt.plot(resolutions_louvain, nb_clusters_louvain, 'ro', markersize=2, label='Louvain')
-    for resolution in key_resolutions_louvain:
-        if resolution < resolutions_paris[1]:
-            plt.axvline(x=resolution, color='k', alpha=.2)
+    # for resolution in key_resolutions_louvain:
+    #     if resolution < resolutions_paris[1]:
+    #         plt.axvline(x=resolution, color='k', alpha=.2)
 
-    plt.legend(loc=1)
+    plt.legend(loc=2)
     if file_name != "":
         plt.savefig(file_name + ".pdf", bbox_inches='tight')
     else:
@@ -61,8 +61,8 @@ def resolution_modularity(G, k=40, n_tests=100, file_name =""):
         cluster[n_nodes + t] = cluster.pop(int(D[t][0])) + cluster.pop(int(D[t][1]))
         Q = modularity(G, cluster.values(), resolutions_paris[t])
         modularity_paris.append(Q)
-    plt.plot(list(reversed(resolutions_paris))[:k], list(reversed(modularity_paris))[:k], 'b-', linewidth=2)
-    for resolution in resolutions_paris:
+    plt.plot(list(reversed(resolutions_paris))[:k], list(reversed(modularity_paris))[:k], 'b-', linewidth=2, label='Paris')
+    for resolution in resolutions_paris[-k:]:
         plt.axvline(x=resolution, color='k', alpha=.2)
 
     # Louvain
@@ -73,8 +73,9 @@ def resolution_modularity(G, k=40, n_tests=100, file_name =""):
         Q = modularity(G, clusters, resolution)
         modularity_louvain.append(Q)
 
-    plt.plot(resolutions_louvain, modularity_louvain, 'ro', markersize=3)
+    plt.plot(resolutions_louvain, modularity_louvain, 'ro', markersize=3, label='Louvain')
 
+    plt.legend(loc=3)
     if file_name != "":
         plt.savefig(file_name + ".pdf", bbox_inches='tight')
     else:
