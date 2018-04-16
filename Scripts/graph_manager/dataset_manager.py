@@ -14,6 +14,8 @@ def load_dataset(directory, dataset_name):
             G = nx.read_weighted_edgelist(directory + dataset_name + "/edge.txt", nodetype=int)
         elif graph_type == "DU":
             G = nx.read_edgelist(directory + dataset_name + "/edge.txt", nodetype=int, create_using=nx.DiGraph())
+            for (u, v) in G.edges():
+                G.add_edge(u, v, weight=1.)
         else:
             G = nx.read_edgelist(directory + dataset_name + "/edge.txt", nodetype=int)
         G.name = dataset_name
@@ -29,6 +31,7 @@ def load_dataset(directory, dataset_name):
         for line in file:
             s = line.split()
             pos[u] = (float(s[0]), float(s[1]))
+            G.add_node(u)
             u += 1
         file.close()
         G.add_nodes_from(pos.keys())
@@ -41,6 +44,7 @@ def load_dataset(directory, dataset_name):
         u = 0
         for line in file:
             label[u] = line[0:-1]
+            G.add_node(u)
             u += 1
         file.close()
     except:
@@ -130,4 +134,27 @@ def generate_dataset_from_euclidean_points(points, similarity_measure, threshold
     G.add_weighted_edges_from(edges)
     return G, pos, labels
 
+
+def generate_dataset_from_image(image, similarity_measure, neighborhood=1, labels={}):
+    G = nx.Graph()
+    pos = {}
+    pos2node = {}
+    edges = []
+    u = 0
+    for i in range(np.shape(image)[0]):
+        for j in range(np.shape(image)[1]):
+            G.add_node(u)
+            pos[u] = (i, j)
+            pos2node[(i, j)] = u
+            u += 1
+
+    for u in G.nodes():
+        (i, j) = pos[u]
+        for ii in range(max(i - neighborhood, 0), min(i + neighborhood + 1, np.shape(image)[0])):
+            for jj in range(max(j - neighborhood, 0), min(j + neighborhood + 1, np.shape(image)[1])):
+                v = pos2node[(ii, jj)]
+                weight = similarity_measure(image[i, j], image[ii, jj])
+                edges.append((u, v, weight))
+    G.add_weighted_edges_from(edges)
+    return G, pos, labels
 

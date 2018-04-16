@@ -291,7 +291,7 @@ def make_graphical_experiments(algorithms=[], n_samples=1500, run_scikit_algorit
         bandwidth = cluster.estimate_bandwidth(X, quantile=params['quantile'])
 
         # connectivity matrix for structured Ward
-        G, pos, labels = generate_dataset_from_euclidean_points(X, similarity_measure=lambda p, q: np.exp(-np.linalg.norm(p - q)), threshold=.6)
+        G, pos, labels = generate_dataset_from_euclidean_points(X, similarity_measure=lambda p, q: np.exp(-(np.linalg.norm(p - q)/1.)**2), threshold=.8)
         G, pos, labels = connect_dataset_connected_components(G, pos, labels)
         connectivity = nx.to_scipy_sparse_matrix(G)
         print("Dataset: ", i_dataset)

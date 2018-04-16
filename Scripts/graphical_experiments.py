@@ -6,7 +6,7 @@ from dendrogram_manager.distance_slicer import *
 from experiments.experiments_manager import *
 from random import seed
 
-seed(1)
+seed(2)
 SAVE_PLOTS = True
 results_file_name = "algorithms_comparison"
 
@@ -42,4 +42,4 @@ algorithms = [('Louvain', louvain),
               ('Paris+hetero', paris_heterogeneous),
               ('Paris+Louvain', paris_louvain)]
 
-make_graphical_experiments(algorithms=algorithms, n_samples=1500, run_scikit_algorithms=False, SAVE_PLOTS=SAVE_PLOTS, results_file_name=results_file_name)
+make_graphical_experiments(algorithms=[], n_samples=1500, run_scikit_algorithms=True, SAVE_PLOTS=SAVE_PLOTS, results_file_name=results_file_name)

@@ -17,6 +17,7 @@ def plot_dendrogram(D, scaling=lambda x:np.log(x), figsize=(15, 8), file_name=""
         plt.savefig(file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
+    plt.close()
 
 
 def plot_dendrogram_clustering(D, clusters, scaling=lambda x: np.log(x), figsize=(15, 8), file_name=""):
@@ -49,3 +50,4 @@ def plot_dendrogram_clustering(D, clusters, scaling=lambda x: np.log(x), figsize
         plt.savefig(file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
+    plt.close()

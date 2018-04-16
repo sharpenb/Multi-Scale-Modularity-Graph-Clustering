@@ -18,15 +18,15 @@ def louvain(G, resolution=1, eps=0.001):
 def maximize(G, resolution, eps):
     # node weights
     node_weight = {u: 0. for u in G.nodes()}
-    for (u,v) in G.edges():
+    for (u, v) in G.edges():
         node_weight[u] += G[u][v]['weight']
         node_weight[v] += G[u][v]['weight']
     # total weight
     wtot = sum(list(node_weight.values()))
     # clusters
-    cluster = {u:u for u in G.nodes()}
+    cluster = {u: u for u in G.nodes()}
     # total weight of each cluster
-    cluster_weight = {u:node_weight[u] for u in G.nodes()}
+    cluster_weight = {u: node_weight[u] for u in G.nodes()}
     # weights in each community to which the nodes are linked
     w = {u: {v: G[u][v]['weight'] for v in G.neighbors(u) if v != u} for u in G.nodes()}
     increase = True

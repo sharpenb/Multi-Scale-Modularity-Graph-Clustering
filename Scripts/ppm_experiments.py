@@ -8,7 +8,7 @@ from experiments.experiments_manager import *
 SAVE_PLOTS = True
 LOAD_RESULTS = False
 SAVE_RESULTS = True
-directory_results = "/home/sharp/Documents/LINCS/Graph_Clustering/Results/"
+directory_results = "/home/sharp/Documents/Graphs/Graph_Clustering/Results/"
 results_file_name = "ppm"
 n_samples = 10
 
