@@ -1,6 +1,8 @@
 # Results text files
 Results/*
 Datasets/*
+Figures/*
+Images/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
