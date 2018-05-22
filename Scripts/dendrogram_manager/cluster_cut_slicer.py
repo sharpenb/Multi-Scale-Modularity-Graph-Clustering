@@ -27,7 +27,7 @@ def best_cluster_cut(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y))):
     n_nodes = np.shape(D)[0] + 1
     best_cut = -1
     best_cut_score = 0.
-    cluster_trees = {t: ClusterTree(t, 0, 1, 0., [t]) for t in range(n_nodes)}
+    cluster_trees = {t: ClusterTree(t, 0, 1) for t in range(n_nodes)}
     for t in range(n_nodes - 1):
         i = int(D[t][0])
         j = int(D[t][1])
@@ -49,7 +49,7 @@ def best_cluster_cut(D, scoring=lambda w, x, y: w * (np.log(x) - np.log(y))):
             right_tree.score = scoring(right_tree.size, new_distance, right_tree.distance)
         else:
             right_tree.score = 0.
-        if right_tree.score > right_tree.best_score:
+        if right_tree.score > best_cut_score:
             best_cut_score = right_tree.score
             best_cut = right_tree.cluster_label
 

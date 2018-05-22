@@ -34,10 +34,12 @@ def load_results(directory, file_name):
     return range_param, results
 
 
-def save_clusters(clusters, label, directory, file_name):
+def save_clusters(G, clusters, label, directory, file_name):
+    clusters_sorted = sorted(clusters, key=len, reverse=True)
     file = open(directory + file_name, "w")
-    for i, c in enumerate(clusters):
+    for i, c in enumerate(clusters_sorted):
+        c_sorted = sorted(c, key=G.degree, reverse=True)
         file.write("\n\nCluster " + str(i) + " (" + str(len(c)) +" nodes)")
-        for u in c:
+        for u in c_sorted:
             file.write("\n" + str(u) + ": " + label[u])
     file.close()

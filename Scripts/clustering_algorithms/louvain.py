@@ -1,5 +1,6 @@
 import networkx as nx
 from graph_manager.graph_tools import clusters_dict2clusters_list
+from graph_manager.plot_tools import *
 
 
 def louvain(G, resolution=1, eps=0.001):
@@ -43,6 +44,7 @@ def maximize(G, resolution, eps):
                 delta[k] = - resolution * node_weight[u] * cluster_weight[k] / wtot
             # Compare the greatest delta to epsilon
             l = max(delta, key=delta.get)
+            print u, k, l
             if delta[l] - delta[k] > resolution * (node_weight[u] * node_weight[u] / wtot) + eps / wtot:
                 increase = True
                 cluster[u] = l
