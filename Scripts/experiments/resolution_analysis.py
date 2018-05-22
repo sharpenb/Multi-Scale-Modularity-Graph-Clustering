@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from graph_manager.graph_tools import modularity
+from objective_functions.flat_clustering import modularity
 from clustering_algorithms.louvain import louvain
 from clustering_algorithms.paris import paris
 
@@ -34,9 +34,6 @@ def resolution_n_clusters(G, k=40, n_tests=100, file_name =""):
             key_resolutions_louvain.append(resolution)
 
     plt.plot(resolutions_louvain, nb_clusters_louvain, 'ro', markersize=2, label='Louvain')
-    # for resolution in key_resolutions_louvain:
-    #     if resolution < resolutions_paris[1]:
-    #         plt.axvline(x=resolution, color='k', alpha=.2)
 
     plt.legend(loc=2)
     if file_name != "":

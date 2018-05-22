@@ -10,8 +10,8 @@ from clustering_algorithms.louvain import *
 from clustering_algorithms.paris import *
 from experiments.resolution_analysis import *
 
-DISPLAY_PLOTS = False
-SAVE_PLOTS = True
+DISPLAY_PLOTS = True
+SAVE_PLOTS = False
 directory_results = "/home/sharp/Documents/Graphs/Graph_Clustering/Results/"
 results_file_name = "hsbm_balanced"
 n_results = 8
@@ -23,29 +23,29 @@ p_4 = 4.
 p_3 = p_4 * .15
 p_2 = p_3 * .1
 p_1 = p_2 * .05
-# hsbm = HSBM(range(200))
-# hsbm.divide_cluster([100, 100], [[p_4, p_1], [p_1, p_4]])
-# hsbm.next_level[0].divide_cluster([50, 50], [[p_4, p_2], [p_2, p_4]])
-# hsbm.next_level[1].divide_cluster([50, 50], [[p_4, p_2], [p_2, p_4]])
-hsbm = HSBM(range(800))
-hsbm.divide_cluster([400, 400], [[p_4, p_1], [p_1, p_4]])
-hsbm.next_level[0].divide_cluster([200, 200], [[p_4, p_2], [p_2, p_4]])
-hsbm.next_level[1].divide_cluster([200, 200], [[p_4, p_2], [p_2, p_4]])
-hsbm.next_level[0].next_level[0].divide_cluster([100, 100], [[p_4, p_3], [p_3, p_4]])
-hsbm.next_level[0].next_level[1].divide_cluster([100, 100], [[p_4, p_3], [p_3, p_4]])
-hsbm.next_level[1].next_level[0].divide_cluster([100, 100], [[p_4, p_3], [p_3, p_4]])
-hsbm.next_level[1].next_level[1].divide_cluster([100, 100], [[p_4, p_3], [p_3, p_4]])
+hsbm = HSBM(range(200))
+hsbm.divide_cluster([100, 100], [[p_4, p_1], [p_1, p_4]])
+hsbm.next_level[0].divide_cluster([50, 50], [[p_4, p_2], [p_2, p_4]])
+hsbm.next_level[1].divide_cluster([50, 50], [[p_4, p_2], [p_2, p_4]])
+# hsbm = HSBM(range(800))
+# hsbm.divide_cluster([400, 400], [[p_4, p_1], [p_1, p_4]])
+# hsbm.next_level[0].divide_cluster([200, 200], [[p_4, p_2], [p_2, p_4]])
+# hsbm.next_level[1].divide_cluster([200, 200], [[p_4, p_2], [p_2, p_4]])
+# hsbm.next_level[0].next_level[0].divide_cluster([100, 100], [[p_4, p_3], [p_3, p_4]])
+# hsbm.next_level[0].next_level[1].divide_cluster([100, 100], [[p_4, p_3], [p_3, p_4]])
+# hsbm.next_level[1].next_level[0].divide_cluster([100, 100], [[p_4, p_3], [p_3, p_4]])
+# hsbm.next_level[1].next_level[1].divide_cluster([100, 100], [[p_4, p_3], [p_3, p_4]])
 G = hsbm.create_graph(distribution='Poisson')
 pos = nx.spring_layout(G)
 
 
 ### Analysis of the modularity and the number of clusters w.r.t. resolution in Louvain and Paris
-# if DISPLAY_PLOTS:
-#     resolution_modularity(G)
-#     resolution_n_clusters(G)
-# if SAVE_PLOTS:
-#     resolution_modularity(G, file_name=results_file_name + "_resolution_modularity")
-#     resolution_n_clusters(G, file_name=results_file_name + "_resolution_n_clusters")
+if DISPLAY_PLOTS:
+    resolution_modularity(G)
+    resolution_n_clusters(G)
+if SAVE_PLOTS:
+    resolution_modularity(G, file_name=results_file_name + "_resolution_modularity")
+    resolution_n_clusters(G, file_name=results_file_name + "_resolution_n_clusters")
 
 ### Display information about the dataset
 print(nx.info(G))
