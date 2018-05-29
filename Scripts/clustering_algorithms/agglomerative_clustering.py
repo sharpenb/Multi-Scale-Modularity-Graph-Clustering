@@ -5,7 +5,7 @@ import networkx as nx
 _AFFINITY = {'unitary', 'weighted'}
 _LINKAGE = {'single', 'average', 'complete', 'modular'}
 
-def agglomerative_clustering(graph, affinity='weighted', linkage='modular', graph_check=True):
+def agglomerative_clustering(graph, affinity='weighted', linkage='modular', f=lambda l: - np.log(l), check=True):
 
     if affinity not in _AFFINITY:
         raise ValueError("Unknown affinity type %s."
@@ -17,7 +17,7 @@ def agglomerative_clustering(graph, affinity='weighted', linkage='modular', grap
 
     graph_copy = graph.copy()
 
-    if graph_check:
+    if check:
 
         graph_copy = nx.convert_node_labels_to_integers(graph_copy)
 
@@ -32,18 +32,18 @@ def agglomerative_clustering(graph, affinity='weighted', linkage='modular', grap
                            % (n_edges - n_weighted_edges, n_edges))
 
     if linkage == 'single':
-        dendrogram = single_linkage_hierarchy(graph_copy)
+        dendrogram = single_linkage_hierarchy(graph_copy, f)
     elif linkage == 'average':
-        dendrogram = average_linkage_hierarchy(graph_copy)
+        dendrogram = average_linkage_hierarchy(graph_copy, f)
     elif linkage == 'complete':
-        dendrogram = complete_linkage_hierarchy(graph_copy)
+        dendrogram = complete_linkage_hierarchy(graph_copy, f)
     elif linkage == 'modular':
         dendrogram = modular_linkage_hierarchy(graph_copy)
 
     return reorder_dendrogram(dendrogram)
 
 
-def single_linkage_hierarchy(graph):
+def single_linkage_hierarchy(graph, f):
     remaining_nodes = set(graph.nodes())
     n_nodes = len(remaining_nodes)
 
@@ -73,7 +73,7 @@ def single_linkage_hierarchy(graph):
             if chain:
                 c = chain.pop()
                 if b == c:
-                    dendrogram.append([a, b, 1./float(linkage), cluster_size[a] + cluster_size[b]])
+                    dendrogram.append([a, b, f(linkage), cluster_size[a] + cluster_size[b]])
                     graph.add_node(u)
                     remaining_nodes.add(u)
                     neighbors_a = list(graph.neighbors(a))
@@ -82,7 +82,7 @@ def single_linkage_hierarchy(graph):
                         graph.add_edge(u, v, weight=graph[a][v]['weight'])
                     for v in neighbors_b:
                         if graph.has_edge(u, v):
-                            graph[u][v]['weight'] = min(graph[b][v]['weight'], graph[u][v]['weight'])
+                            graph[u][v]['weight'] = max(graph[b][v]['weight'], graph[u][v]['weight'])
                         else:
                             graph.add_edge(u, v, weight=graph[b][v]['weight'])
                     graph.remove_node(a)
@@ -115,7 +115,7 @@ def single_linkage_hierarchy(graph):
     return np.array(dendrogram)
 
 
-def average_linkage_hierarchy(graph):
+def average_linkage_hierarchy(graph, f):
     remaining_nodes = set(graph.nodes())
     n_nodes = len(remaining_nodes)
 
@@ -145,7 +145,7 @@ def average_linkage_hierarchy(graph):
             if chain:
                 c = chain.pop()
                 if b == c:
-                    dendrogram.append([a, b, 1./float(linkage), cluster_size[a] + cluster_size[b]])
+                    dendrogram.append([a, b, f(linkage), cluster_size[a] + cluster_size[b]])
                     graph.add_node(u)
                     remaining_nodes.add(u)
                     neighbors_a = list(graph.neighbors(a))
@@ -187,8 +187,7 @@ def average_linkage_hierarchy(graph):
     return np.array(dendrogram)
 
 
-
-def complete_linkage_hierarchy(graph):
+def complete_linkage_hierarchy(graph, f):
     remaining_nodes = set(graph.nodes())
     n_nodes = len(remaining_nodes)
 
@@ -218,7 +217,7 @@ def complete_linkage_hierarchy(graph):
             if chain:
                 c = chain.pop()
                 if b == c:
-                    dendrogram.append([a, b, 1./float(linkage), cluster_size[a] + cluster_size[b]])
+                    dendrogram.append([a, b, f(linkage), cluster_size[a] + cluster_size[b]])
                     graph.add_node(u)
                     remaining_nodes.add(u)
                     neighbors_a = list(graph.neighbors(a))
@@ -227,7 +226,7 @@ def complete_linkage_hierarchy(graph):
                         graph.add_edge(u, v, weight=graph[a][v]['weight'])
                     for v in neighbors_b:
                         if graph.has_edge(u, v):
-                            graph[u][v]['weight'] = max(graph[b][v]['weight'], graph[u][v]['weight'])
+                            graph[u][v]['weight'] = min(graph[b][v]['weight'], graph[u][v]['weight'])
                         else:
                             graph.add_edge(u, v, weight=graph[b][v]['weight'])
                     graph.remove_node(a)

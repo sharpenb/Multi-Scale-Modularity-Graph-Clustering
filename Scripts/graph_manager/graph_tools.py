@@ -1,6 +1,3 @@
-import numpy as np
-import networkx as nx
-
 def clusters_dict2clusters_list(cluster_dict):
     i = 0
     cluster_index = {}
