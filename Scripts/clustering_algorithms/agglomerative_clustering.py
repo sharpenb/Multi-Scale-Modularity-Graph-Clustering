@@ -3,7 +3,8 @@ import networkx as nx
 
 
 _AFFINITY = {'unitary', 'weighted'}
-_LINKAGE = {'single', 'average', 'complete', 'modular'}
+_LINKAGE = {'single', 'average', 'complete', 'modular', 'ultra-modular'}
+
 
 def agglomerative_clustering(graph, affinity='weighted', linkage='modular', f=lambda l: - np.log(l), check=True):
 
@@ -22,7 +23,7 @@ def agglomerative_clustering(graph, affinity='weighted', linkage='modular', f=la
         graph_copy = nx.convert_node_labels_to_integers(graph_copy)
 
         if affinity == 'unitary':
-            for e in graph_copy.edges:
+            for e in graph_copy.edges():
                 graph_copy.add_edge(e[0], e[1], weight=1)
 
         n_edges = len(list(graph_copy.edges()))
@@ -39,8 +40,11 @@ def agglomerative_clustering(graph, affinity='weighted', linkage='modular', f=la
         dendrogram = complete_linkage_hierarchy(graph_copy, f)
     elif linkage == 'modular':
         dendrogram = modular_linkage_hierarchy(graph_copy)
+    elif linkage == 'ultra-modular':
+        dendrogram = structured_modular_linkage_hierarchy(graph_copy)
 
     return reorder_dendrogram(dendrogram)
+
 
 
 def single_linkage_hierarchy(graph, f):
@@ -338,6 +342,42 @@ def modular_linkage_hierarchy(graph):
         u += 1
 
     return np.array(dendrogram)
+
+
+def structured_modular_linkage_hierarchy(graph):
+    remaining_nodes = set(graph.nodes())
+    n_nodes = len(remaining_nodes)
+
+    w = {u: 0 for u in range(n_nodes)}
+    wtot = 0
+    for (u, v) in graph.edges():
+        weight = graph[u][v]['weight']
+        w[u] += weight
+        w[v] += weight
+        wtot += 2 * weight
+    cluster_size = {u: 1 for u in range(n_nodes)}
+    connected_components = []
+    dendrogram = []
+    u = n_nodes
+
+    # Compute limit resolutions and limit clusters for every node
+    linkage_max_node = {}
+    linkage_edge = {}
+    best_neighbor = {}
+    for u in graph.nodes():
+        linkage_edge[u] = {}
+        for v in graph.neighbors(u):
+            if v != u:
+                linkage = graph[u][v]['weight'] / float(w[u] + w[v])
+                linkage_edge[u][v] = linkage
+        if len(linkage_edge[u]) > 0:
+            best_neighbor[u] = max(linkage_edge[u], key=linkage_edge[u].get)
+            linkage_max_node[u] = linkage_edge[u][best_neighbor[u]]
+        else:
+            linkage_edge.pop(u)
+
+    return np.array(dendrogram)
+
 
 def reorder_dendrogram(D):
     n = np.shape(D)[0] + 1

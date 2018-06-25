@@ -79,10 +79,15 @@ def save_dataset(directory, dataset_name, G, pos={}, label={}):
             file.write(str(label[u]) + " " + "\n")
     file.close()
 
+    nx.write_graphml(G, directory + dataset_name + "/" + dataset_name +".graphml")
+
 
 def clean_dataset(G, pos={}, label={}):
     mapping = dict(zip(G.nodes(), range(G.number_of_nodes())))
     G_cleaned = nx.relabel_nodes(G, mapping)
+    if not len(nx.get_edge_attributes(G_cleaned, 'weight')) == len(G_cleaned.edges()):
+        for u, v in G_cleaned.edges():
+                G_cleaned[u][v]['weight'] = 1
     pos_cleaned = {}
     for u in pos:
         pos_cleaned[mapping[u]] = pos[u]
