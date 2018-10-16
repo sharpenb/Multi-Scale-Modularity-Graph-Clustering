@@ -39,7 +39,7 @@ def agglomerative_clustering(graph, affinity='weighted', linkage='modular', f=la
     elif linkage == 'complete':
         dendrogram = complete_linkage_hierarchy(graph_copy, f)
     elif linkage == 'modular':
-        dendrogram = modular_linkage_hierarchy(graph_copy)
+        dendrogram = modular_linkage_hierarchy(graph_copy, f)
     elif linkage == 'ultra-modular':
         dendrogram = structured_modular_linkage_hierarchy(graph_copy)
 
@@ -263,7 +263,7 @@ def complete_linkage_hierarchy(graph, f):
     return np.array(dendrogram)
 
 
-def modular_linkage_hierarchy(graph):
+def modular_linkage_hierarchy(graph, f):
     remaining_nodes = set(graph.nodes())
     n_nodes = len(remaining_nodes)
 
@@ -285,22 +285,22 @@ def modular_linkage_hierarchy(graph):
             break
         while chain:
             a = chain.pop()
-            d_min = float("inf")
+            linkage_max = - float("inf")
             b = -1
             neighbors_a = list(graph.neighbors(a))
             for v in neighbors_a:
                 if v != a:
-                    d = w[v] * w[a] / float(graph[a][v]['weight']) / float(wtot)
-                    if d < d_min:
+                    linkage = wtot * float(graph[a][v]['weight'])/(w[a]*w[v])
+                    if linkage > linkage_max:
                         b = v
-                        d_min = d
-                    elif d == d_min:
+                        linkage_max = linkage
+                    elif linkage == linkage_max:
                         b = min(b, v)
-            d = d_min
+            linkage = linkage_max
             if chain:
                 c = chain.pop()
                 if b == c:
-                    dendrogram.append([a, b, d, cluster_size[a] + cluster_size[b]])
+                    dendrogram.append([a, b, f(linkage), cluster_size[a] + cluster_size[b]])
                     graph.add_node(u)
                     remaining_nodes.add(u)
                     neighbors_a = list(graph.neighbors(a))

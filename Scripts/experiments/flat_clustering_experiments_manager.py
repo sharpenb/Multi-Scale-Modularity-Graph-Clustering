@@ -12,8 +12,9 @@ from itertools import cycle, islice
 from graph_manager.graph_tools import clusters_list2clusters_dict
 from graph_manager.dataset_manager import *
 from experiments.results_manager import *
-from experiments.samples_manager import *
+from experiments.flat_clustering_samples_manager import *
 
+### Hard Clustering ###
 
 def make_n_blocks_experiment(algorithms, range_n_blocks=range(10, 100, 10), block_size=10, d_in=5., d_out=1., n_samples=10, score=lambda true, pred: AMI(true, pred),
                              SAVE_PLOTS=False, LOAD_RESULTS=False, SAVE_RESULTS=False, directory_results="", results_file_name=""):
@@ -32,8 +33,8 @@ def make_n_blocks_experiment(algorithms, range_n_blocks=range(10, 100, 10), bloc
                 save_results(results_algorithms[name], range_n_blocks, directory_results, results_file_name + "_n_blocks_" + name)
                 save_results(results_algorithms_blocks[name], range_n_blocks, directory_results, results_file_name + "_n_blocks_blocks_" + name)
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'y']
-    markers = ['o', '+', 'x', '*', '^', 'v']
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'chocolate']
+    markers = ['o', '+', 'x', '*', '^', 'v', 's', 'h']
 
     plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
@@ -78,8 +79,8 @@ def make_block_size_experiment(algorithms, range_block_size=range(10, 50, 5), n_
                 save_results(results_algorithms[name], range_block_size, directory_results, results_file_name + "_block_size_" + name)
                 save_results(results_algorithms_blocks[name], range_block_size, directory_results, results_file_name + "_block_size_blocks_" + name)
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'y']
-    markers = ['o', '+', 'x', '*', '^', 'v']
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'chocolate']
+    markers = ['o', '+', 'x', '*', '^', 'v', 's', 'h']
 
     plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
@@ -124,8 +125,8 @@ def make_degree_in_out_experiment(algorithms, d_in=5., range_d_out=np.linspace(1
                 save_results(results_algorithms[name], range_d_out, directory_results, results_file_name + "_degree_in_out_" + name)
                 save_results(results_algorithms_blocks[name], range_d_out, directory_results, results_file_name + "_degree_in_out_blocks_" + name)
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'y']
-    markers = ['o', '+', 'x', '*', '^', 'v']
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'chocolate']
+    markers = ['o', '+', 'x', '*', '^', 'v', 's', 'h']
 
     plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
@@ -170,8 +171,8 @@ def make_block_size_het_experiment(algorithms, range_param=np.linspace(1., 3., n
                 save_results(results_algorithms[name], range_param, directory_results, results_file_name + "_block_size_het_" + name)
                 save_results(results_algorithms_blocks[name], range_param, directory_results, results_file_name + "_block_size_het_blocks_" + name)
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'y']
-    markers = ['o', '+', 'x', '*', '^', 'v']
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'chocolate']
+    markers = ['o', '+', 'x', '*', '^', 'v', 's', 'h']
 
     plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
@@ -216,8 +217,8 @@ def make_block_size_ratio_experiment(algorithms, range_ratio=range(1,10), big_bl
                 save_results(results_algorithms[name], range_ratio, directory_results, results_file_name + "_block_size_ratio_" + name)
                 save_results(results_algorithms_blocks[name], range_ratio, directory_results, results_file_name + "_block_size_ratio_blocks_" + name)
 
-    colors = ['b', 'g', 'r', 'c', 'm', 'y']
-    markers = ['o', '+', 'x', '*', '^', 'v']
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k', 'chocolate']
+    markers = ['o', '+', 'x', '*', '^', 'v', 's', 'h']
 
     plt.figure()
     for i, (name, algorithm) in enumerate(algorithms):
@@ -388,3 +389,4 @@ def make_graphical_experiments(algorithms=[], n_samples=1500, run_scikit_algorit
         plt.savefig(results_file_name + ".png", bbox_inches='tight')
     else:
         plt.show()
+

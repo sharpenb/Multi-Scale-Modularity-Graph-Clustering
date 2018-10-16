@@ -6,18 +6,21 @@ from dendrogram_manager.homogeneous_cut_slicer import *
 from dendrogram_manager.heterogeneous_cut_slicer import *
 from dendrogram_manager.cluster_cut_slicer import *
 from dendrogram_manager.distance_slicer import *
+from clustering_algorithms.spectral_clustering import *
 from clustering_algorithms.louvain import *
 from clustering_algorithms.paris import *
 from experiments.results_manager import save_clusters
 from community import best_partition
 
+import numpy as np
+
 DISPLAY_PLOTS = False
 SAVE_PLOTS = False
 SAVE_RESULTS = True
-# directory_datasets = "/home/sharp/Documents/Graphs/Graph_Clustering/Datasets/"
-directory_datasets = "/home/sharp/Documents/Graphs/Datasets/Raw_Datasets/"
+directory_datasets = "/home/sharp/Documents/Graphs/Graph_Clustering/Datasets/"
+# directory_datasets = "/home/sharp/Documents/Graphs/Datasets/Raw_Datasets/"
 # dataset_name = "openflight_clean"
-# dataset_name = "openstreet_clean"
+dataset_name = "openstreet_clean"
 # dataset_name = "soccer_players_clean"
 # dataset_name = "dico_clean"
 # dataset_name = "hum-wikipedia_clean"
@@ -34,7 +37,7 @@ directory_datasets = "/home/sharp/Documents/Graphs/Datasets/Raw_Datasets/"
 # dataset_name = "soccer_players"
 # dataset_name = "dico"
 # dataset_name = "hum-wikipedia"
-dataset_name = "wikipedia-schools"
+# dataset_name = "wikipedia-schools"
 # dataset_name = "dblp"
 # dataset_name = "facebook"
 # dataset_name = "amazon"
@@ -48,14 +51,14 @@ results_file_name = dataset_name
 n_results = 4
 
 ### Clean dataset and extract the largest connected component
-G, pos, label = load_dataset(directory_datasets, dataset_name)
-G, pos, label = clean_dataset(G, pos, label)
-G, pos, label = extract_dataset_connected_components(G, pos, label)
-G, pos, label = clean_dataset(G, pos, label)
-save_dataset(directory_datasets, dataset_name + "_clean", G, pos, label)
+# G, pos, label = load_dataset(directory_datasets, dataset_name)
+# G, pos, label = clean_dataset(G, pos, label)
+# G, pos, label = extract_dataset_connected_components(G, pos, label)
+# G, pos, label = clean_dataset(G, pos, label)
+# save_dataset(directory_datasets, dataset_name + "_clean", G, pos, label)
 
 ### Load dataset
-# G, pos, label = load_dataset(directory_datasets, dataset_name)
+G, pos, label = load_dataset(directory_datasets, dataset_name)
 
 ### Display information about the dataset
 print(nx.info(G))
@@ -63,10 +66,17 @@ print(nx.info(G))
 #     plot_graph(G, pos)
 
 ### Apply Paris
-# time_paris = time()
-# D = paris(G)
-# time_paris = time() - time_paris
-# print("Paris", time_paris)
+time_paris = []
+time_louvain = []
+for i in range(1):
+    time_paris.append(time())
+    # D = paris(G)
+    # cluster = louvain(G)
+    cluster = spectral_clustering(G, n_clusters=50)
+    time_paris[ -1] = time() - time_paris[-1]
+print("Paris", np.mean(time_paris), np.var(time_paris))
+plot_graph_clustering(G, cluster, pos, file_name=results_file_name + "_spectral")
+
 
 # print("Best clusters")
 # ranked_cuts, ranked_scores = ranking_cluster_cuts(D, lambda w, x, y:  (np.log(x) - np.log(y)))

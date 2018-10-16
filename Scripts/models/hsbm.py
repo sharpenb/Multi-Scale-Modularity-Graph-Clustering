@@ -9,6 +9,23 @@ class HSBM:
         self.next_level = []
         self._p_matrix = probability * np.ones((1, 1))
 
+    @staticmethod
+    def balanced(n_levels, decay_factor, division_factor, core_community_size, p_in):
+        nodes = range(division_factor**n_levels * core_community_size)
+        hsbm = HSBM(nodes, probability=p_in)
+        hsbm._balanced_recursive(n_levels, decay_factor, division_factor, core_community_size, p_in)
+        return hsbm
+
+    def _balanced_recursive(self, n_levels, decay_factor, division_factor, core_community_size, p_in):
+        if n_levels > 0:
+            community_size = len(self._nodes) / division_factor
+            partition = division_factor * [community_size]
+            p_matrix = p_in * decay_factor**(n_levels) * np.ones((division_factor, division_factor))
+            np.fill_diagonal(p_matrix, p_in * np.ones(division_factor))
+            self.divide_cluster(partition=partition, p_matrix=p_matrix)
+            for cluster in self.next_level:
+                cluster._balanced_recursive(n_levels - 1, decay_factor, division_factor, core_community_size, p_in)
+
     def divide_cluster(self, partition, p_matrix):
         partition.insert(0, 0)
         repartition = np.cumsum(np.array(partition))

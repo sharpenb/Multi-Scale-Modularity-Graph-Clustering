@@ -6,7 +6,7 @@ _LINKAGE = {'single', 'average', 'complete', 'modular', 'classic', 'classic-unif
 _DIVERGENCE = {'Kullback-Leibler'}
 
 
-def graph2tree_cost(graph, dendrogram, affinity='weighted', linkage='classic', g=lambda a, b: a + b, check=True):
+def graph2tree_cost(graph, dendrogram, affinity='weighted', linkage='classic-weighted', g=lambda a, b: a + b, check=True):
 
     if linkage not in _LINKAGE:
         raise ValueError("Unknown linkage type %s."
@@ -459,7 +459,7 @@ def graph2dendrogram_cost(graph, dendrogram, affinity="weighted", divergence="Ku
 def kullback_leibler_dendrogram_cost(graph, dendrogram):
     n_nodes = np.shape(dendrogram)[0] + 1
 
-    objective_sum__term = 0
+    objective_sum_term = 0
     objective_log_term = 0
 
     w = {u: 0 for u in range(n_nodes)}
@@ -480,7 +480,7 @@ def kullback_leibler_dendrogram_cost(graph, dendrogram):
         p_b = w[b] / float(wtot)
         d_ab = dendrogram[t][2]
 
-        objective_sum__term += p_ab * np.log(d_ab)
+        objective_sum_term += p_ab * np.log(d_ab)
         objective_log_term += p_a * p_b / float(d_ab)
 
         graph.add_node(u)
@@ -498,4 +498,4 @@ def kullback_leibler_dendrogram_cost(graph, dendrogram):
         w[u] = w.pop(a) + w.pop(b)
         u += 1
 
-    return objective_sum__term + np.log(objective_log_term)
+    return objective_sum_term + np.log(objective_log_term)

@@ -3,7 +3,7 @@ from clustering_algorithms.paris import *
 from dendrogram_manager.homogeneous_cut_slicer import *
 from dendrogram_manager.heterogeneous_cut_slicer import *
 from dendrogram_manager.distance_slicer import *
-from experiments.experiments_manager import *
+from experiments.flat_clustering_experiments_manager import *
 from random import seed
 
 seed(2)
